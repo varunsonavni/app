@@ -12,7 +12,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 ################################################################################
-# Security Group — allows PostgreSQL only from within the VPC
+# Security Group - only allows PostgreSQL from within the VPC
 ################################################################################
 
 resource "aws_security_group" "rds" {
@@ -53,7 +53,7 @@ resource "aws_db_instance" "this" {
   identifier = "${var.name_prefix}-postgres"
 
   engine         = "postgres"
-  engine_version = "15"
+  engine_version = "17"
   instance_class = var.db_instance_class
 
   allocated_storage     = var.db_allocated_storage

@@ -87,7 +87,7 @@ resource "aws_security_group" "ec2" {
 }
 
 ################################################################################
-# ALB — using official terraform-aws-modules community module
+# ALB - uses the official terraform-aws-modules community module
 ################################################################################
 
 module "alb" {

@@ -29,7 +29,7 @@ Production-ready, 2-tier AWS infrastructure built with Terraform.
 
 ## Prerequisites
 
-- Terraform >= 1.5.0
+- Terraform >= 1.10.0
 - AWS CLI configured with valid credentials
 - AWS account with sufficient permissions
 

@@ -11,13 +11,11 @@ permissions:
   pull-requests: write
 
 env:
-  TF_VERSION: "1.5.0"
+  TF_VERSION: "1.10.0"
   AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
 
 jobs:
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Stage 1: Detect which directories have changed and build a dynamic matrix
-  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 1 - detect which directories changed and build a dynamic matrix
   detect-changes:
     name: "Detect Changes"
     runs-on: ubuntu-latest
@@ -53,12 +51,12 @@ jobs:
           while IFS= read -r file; do
             [ -z "$file" ] && continue
 
-            # Shared infrastructure change → downstream impact on all apps
+            # shared infra changed, need to check all apps downstream
             if [[ "$file" == global/* ]]; then
               GLOBAL_CHANGED=true
             fi
 
-            # App-specific change → plan only the affected app
+            # only this app changed, plan just this one
             if [[ "$file" == apps/*/* ]]; then
               app=$(echo "$file" | cut -d'/' -f2)
               APP_SET["$app"]=1
@@ -94,9 +92,7 @@ jobs:
             echo "Apps to plan: ${APPS[*]}"
           fi
 
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Stage 2: Run terraform plan for each affected app in parallel
-  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 2 - run terraform plan for each affected app in parallel
   terraform-plan:
     name: "Plan: ${{ matrix.app }}"
     needs: detect-changes
@@ -146,7 +142,7 @@ jobs:
         if: always()
         run: |
           {
-            echo "## Terraform Plan — \`${{ matrix.app }}\`"
+            echo "## Terraform Plan - \`${{ matrix.app }}\`"
             echo ""
             echo "| Step | Status |"
             echo "|------|--------|"
@@ -168,9 +164,7 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Stage 3: No-op job so required status checks pass on docs-only changes
-  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 3 - no-op job so required status checks still pass on docs-only changes
   skip:
     name: "No Infrastructure Changes"
     needs: detect-changes
@@ -182,4 +176,4 @@ jobs:
         run: |
           echo "## Pipeline Skipped" >> "$GITHUB_STEP_SUMMARY"
           echo "No Terraform-relevant files changed. No plans executed." >> "$GITHUB_STEP_SUMMARY"
-          echo "Pipeline skipped — no infrastructure changes detected."
+          echo "Pipeline skipped - no infrastructure changes detected."

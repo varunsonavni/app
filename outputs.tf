@@ -16,3 +16,12 @@ output "private_subnet_ids" {
   description = "IDs of the private subnets"
   value       = module.networking.private_subnet_ids
 }
+
+################################################################################
+# Database
+################################################################################
+
+output "db_endpoint" {
+  description = "Connection endpoint of the RDS instance"
+  value       = module.database.db_endpoint
+}

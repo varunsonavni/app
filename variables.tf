@@ -31,3 +31,24 @@ variable "vpc_cidr" {
     error_message = "VPC CIDR must be a valid IPv4 CIDR block."
   }
 }
+
+################################################################################
+# Database
+################################################################################
+
+variable "db_username" {
+  description = "Master username for the RDS instance"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_password" {
+  description = "Master password for the RDS instance"
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = length(var.db_password) >= 8
+    error_message = "Database password must be at least 8 characters."
+  }
+}

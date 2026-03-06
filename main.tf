@@ -19,3 +19,18 @@ module "networking" {
   public_subnets  = local.public_subnets
   private_subnets = local.private_subnets
 }
+
+################################################################################
+# Database
+################################################################################
+
+module "database" {
+  source = "./modules/database"
+
+  name_prefix        = local.name_prefix
+  vpc_id             = module.networking.vpc_id
+  vpc_cidr           = var.vpc_cidr
+  private_subnet_ids = module.networking.private_subnet_ids
+  db_username        = var.db_username
+  db_password        = var.db_password
+}

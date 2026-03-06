@@ -5,18 +5,15 @@ Production-ready, 2-tier AWS infrastructure built with Terraform.
 ## Architecture
 
 ```
-                    ┌─────────────────────────────────────────────┐
-                    │                    VPC                       │
-                    │              192.168.0.0/16                  │
-                    │                                             │
-  Internet ──── IGW ──┬── Public Subnet A ──┬── ALB ────────────┐│
-                    │  └── Public Subnet B ──┘                   ││
-                    │                                            ││
-                    │  ┌── Private Subnet A ──┬── ASG (Nginx) ◄─┘│
-                    │  └── Private Subnet B ──┤                   │
-                    │         NAT GW ◄────────┤                   │
-                    │                         └── RDS PostgreSQL  │
-                    └─────────────────────────────────────────────┘
+                  +----------- VPC (192.168.0.0/16) -----------+
+                  |                                            |
+Internet ---> IGW |   Public Subnets      Private Subnets      |
+                  |   .1.0/24 (AZ-a)      .3.0/24 (AZ-a)      |
+                  |   .2.0/24 (AZ-b)      .4.0/24 (AZ-b)      |
+                  |                                            |
+                  |   ALB (:80) --------> ASG (Nginx, 1-3)     |
+                  |   NAT GW <----------- RDS (PostgreSQL 17)  |
+                  +--------------------------------------------+
 ```
 
 ## Modules

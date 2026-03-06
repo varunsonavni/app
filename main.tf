@@ -34,3 +34,16 @@ module "database" {
   db_username        = var.db_username
   db_password        = var.db_password
 }
+
+################################################################################
+# Compute
+################################################################################
+
+module "compute" {
+  source = "./modules/compute"
+
+  name_prefix        = local.name_prefix
+  vpc_id             = module.networking.vpc_id
+  public_subnet_ids  = module.networking.public_subnet_ids
+  private_subnet_ids = module.networking.private_subnet_ids
+}

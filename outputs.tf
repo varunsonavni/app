@@ -25,3 +25,12 @@ output "db_endpoint" {
   description = "Connection endpoint of the RDS instance"
   value       = module.database.db_endpoint
 }
+
+################################################################################
+# Compute
+################################################################################
+
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = module.compute.alb_dns_name
+}
